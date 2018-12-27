@@ -1,0 +1,28 @@
+How does Mirana understand URL
+1. The form of url is always: domain/some/path/some_thing, thanks to .htaccess file
+in short, we may ignore /some/path/, and unique the form into:
+domain/some_thing
+2. First Mirana will check is there any domain which is configured to point to a specific app
+    If so, Mirana will set that app as the main_application for the request
+    Else, Mirana will check the first element of "some_thing" part, separated by a slash (" / ") {
+        If you did register an app for that specific phase, Mirana will load the app
+        Else, Mirana will return "can not find app (404 - content not found)"
+    }
+3. Once Mirana has its main_application (which is configured), it will try to load the configured directory
+If the folder is available, great, get to app main file (containing init and stuffs)
+Else, Mirana will return "can not find app folder (404 - content not found)"
+4. For each app, it has a specific folder name "public", actually the name is not so important, but the URL.
+Everything at the url: /public/some_thing/some_file.jpg (css,exe,whatever,...) will be redirect to that "public" folder
+(In short, you won't mess with multiple public for multiple app)
+5. For each app, it has a specific folder name "api", and, the name is not so important, too, but the URL (again).
+In this folder, there's all the service(s), all of your model files, and a configuration file
+The file defines how you call your functions, let's say "/path/to/function/functionname"
+Everything at the url: /api/something, for example: /api/path/to/function/functionname will point to the function that you defined
+But since it's function, it's more complicated. Exactly, the parameters.
+$POST and $GET values are there, and you also have the following URL (in case you want to try the dumbazz RESTful: /id/5/blah/2/...)
+6. For each app, it has a specific folder name "view", and blah... (you know it)
+For the view folder, there's no prefix. Everything you defined, will come directly after "app"
+And this is also where you put your view, component, and enjoy the "Star template engine"
+7. Gently exit.
+
+Thanks, happy coding!

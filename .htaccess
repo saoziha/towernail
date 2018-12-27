@@ -1,0 +1,33 @@
+RewriteEngine On
+
+# Set REQUEST_SCHEME (standard environment variable in Apache 2.4)
+RewriteCond %{HTTPS} off
+RewriteRule .* - [E=REQUEST_SCHEME:http]
+
+RewriteCond %{HTTPS} on
+RewriteRule .* - [E=REQUEST_SCHEME:https]
+
+#not allow
+<files .htaccess>
+order allow,deny
+deny from all
+</files>
+
+<files config.php>
+order allow,deny
+deny from all
+</files>
+
+#IMPORTANT!!! the order must follow this
+
+#everything is passed to $_GET[PARAMS]
+#redirect status
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+#directory
+RewriteCond %{REQUEST_FILENAME} !-d
+#file
+RewriteCond %{REQUEST_FILENAME} !-f
+#symlinks
+RewriteCond %{REQUEST_FILENAME} !-l
+###
+RewriteRule ^(.*)$ index.php?PARAMS=$1 [QSA,NC,L]
